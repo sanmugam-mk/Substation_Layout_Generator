@@ -133,7 +133,8 @@ form.addEventListener("submit", async (e) => {
     }
 
     const filename = data.file || form.elements["out_file"].value;
-    downloadLink.href          = "/" + encodeURIComponent(data.file);
+    downloadLink.href =
+    "/download/" + encodeURIComponent(data.file);
     downloadLink.download      = filename;
     resultFilename.textContent = filename;
     dimensionsText.textContent = `Canvas: ${data.canvas_w} × ${data.canvas_h} mm`;
