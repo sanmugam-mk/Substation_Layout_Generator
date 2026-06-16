@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, send_file
 from pathlib import Path
 import os
 
@@ -46,6 +46,24 @@ def generate():
             "error": str(e)
         }), 500
 
+@app.route("/download/<filename>")
+def download_file(filename):
+
+    output_dir = BASE_DIR / "output_layout"
+
+    file_path = output_dir / filename
+
+    if not file_path.exists():
+        return jsonify({
+            "success": False,
+            "error": "File not found"
+        }), 404
+
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name=filename
+    )
 
 def params_from_payload(payload):
 
