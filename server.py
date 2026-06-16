@@ -1,6 +1,5 @@
 """
 server.py
-=========
 Browser-based frontend server for the substation layout generator.
 """
 
@@ -16,7 +15,6 @@ from output.dxf_writer import write_dxf
 BASE_DIR = Path(__file__).resolve().parent
 HOST = "127.0.0.1"
 PORT = 8000
-
 
 class DXFRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):

@@ -1,17 +1,12 @@
 """
 inputs/form.py
-==============
-All user-facing prompts live here.
+This file fetches the user inputs.
 Returns a fully populated SubstationParams.
 """
 
 from inputs.schema import SubstationParams
 
-
-# ─────────────────────────────────────────────────────────────
 # PROMPT HELPERS
-# ─────────────────────────────────────────────────────────────
-
 def _ask_int(prompt: str, default: int) -> int:
     while True:
         raw = input(f"    {prompt} [{default}]: ").strip()
@@ -47,10 +42,7 @@ def _ask_bool(prompt: str, default: bool) -> bool:
 def _section(title: str):
     print(f"\n  ── {title} {'─' * (44 - len(title))}")
 
-
-# ─────────────────────────────────────────────────────────────
 # MAIN FORM
-# ─────────────────────────────────────────────────────────────
 
 def collect_inputs() -> SubstationParams:
     p = SubstationParams()
@@ -63,11 +55,11 @@ def collect_inputs() -> SubstationParams:
     print("  Press Enter to accept the default shown in [brackets].")
     print("  All dimensions are in millimetres (mm).")
 
-    # ── Power supply ──────────────────────────────────────────
+    # Power supply 
     _section("POWER SUPPLY")
     p.supply_kv = _ask_int("Supply voltage (kV)", p.supply_kv)
 
-    # ── Transformers ──────────────────────────────────────────
+    # Transformers 
     _section("TRANSFORMERS")
     p.n_tx      = _ask_int("Number of transformers", p.n_tx)
     p.tx_rating = _ask_str("Rating per transformer (e.g. 1000 kVA)", p.tx_rating)
@@ -75,21 +67,21 @@ def collect_inputs() -> SubstationParams:
     p.tx_length = _ask_int("  TX LENGTH — horizontal (mm)", p.tx_length)
     p.tx_width  = _ask_int("  TX WIDTH  — vertical   (mm)", p.tx_width)
 
-    # ── HT Panel ──────────────────────────────────────────────
+    #  HT Panel 
     _section("HT PANEL")
     p.ht_incomers  = _ask_int("Number of incomers",  p.ht_incomers)
     p.ht_outgoings = _ask_int("Number of outgoings", p.ht_outgoings)
     p.ht_panel_length = _ask_int("HT Panel Length (mm)", p.ht_panel_length)
     p.ht_panel_width  = _ask_int("HT Panel Width (mm)",  p.ht_panel_width)
 
-    # ── LT Panel ──────────────────────────────────────────────
+    #  LT Panel 
     _section("LT PANEL")
     p.lt_incomers  = _ask_int("Number of incomers",  p.lt_incomers)
     p.lt_outgoings = _ask_int("Number of outgoings", p.lt_outgoings)
     p.lt_panel_length = _ask_int("LT Panel Length (mm)", p.lt_panel_length)
     p.lt_panel_width  = _ask_int("LT Panel Width (mm)",  p.lt_panel_width)
 
-    # ── DG Synchronizer ───────────────────────────────────────
+    # DG Synchronizer
     _section("DG SYNCHRONIZER PANEL")
     print("    (Single synchronizer panel replaces individual DG sets in the layout)")
     print("    LENGTH = horizontal span on drawing  |  WIDTH = vertical depth on drawing")
@@ -97,7 +89,7 @@ def collect_inputs() -> SubstationParams:
     p.dg_sync_length = _ask_int("Panel LENGTH — horizontal (mm)", p.dg_sync_length)
     p.dg_sync_width  = _ask_int("Panel WIDTH  — vertical   (mm)", p.dg_sync_width)
 
-    # ── Optional blocks ───────────────────────────────────────
+    # Optional blocks 
     _section("OPTIONAL EQUIPMENT")
     p.has_apfc = _ask_bool("Include APFC Panel?", p.has_apfc)
     if p.has_apfc:
@@ -114,13 +106,13 @@ def collect_inputs() -> SubstationParams:
         p.tx_ngr_length = _ask_int("  TX NGR LENGTH — horizontal (mm)", p.tx_ngr_length)
         p.tx_ngr_width  = _ask_int("  TX NGR WIDTH  — vertical   (mm)", p.tx_ngr_width)
 
-    # ── Output file ───────────────────────────────────────────
+    # Output file
     _section("OUTPUT")
     p.out_file = _ask_str("Output filename (.dxf)", p.out_file)
     if not p.out_file.endswith(".dxf"):
         p.out_file += ".dxf"
 
-    # ── Summary ───────────────────────────────────────────────
+    # Summary 
     print()
     print("  ┌─ Layout summary ─────────────────────────────")
     print(f"  │  Supply         : {p.supply_kv} kV")

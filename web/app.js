@@ -1,4 +1,4 @@
-// ── Element refs ──────────────────────────────────────────
+//Element refs 
 const form           = document.getElementById("layout-form");
 const genBtn         = document.getElementById("generate-btn");
 const statusIcon     = document.getElementById("status-icon");
@@ -13,7 +13,7 @@ const nTxNgr     = form.elements["n_tx_ngr"];
 const apfcFields = document.getElementById("apfc-fields");
 const ngrFields  = document.getElementById("ngr-fields");
 
-// ── Optional equipment toggle ─────────────────────────────
+//Optional equipment toggle 
 function syncOptional() {
   const apfcOn = apfcToggle.checked;
   const ngrOn  = parseInt(nTxNgr.value || "0") > 0;
@@ -28,7 +28,7 @@ apfcToggle.addEventListener("change", syncOptional);
 nTxNgr    .addEventListener("input",  syncOptional);
 syncOptional();
 
-// ── Live summary sidebar ──────────────────────────────────
+//Live summary sidebar 
 const summaryFields = {
   "s-supply": () => (form.elements["supply_kv"].value || "—") + " kV",
   "s-tx": () => {
@@ -74,14 +74,14 @@ form.addEventListener("input",  updateSummary);
 form.addEventListener("change", updateSummary);
 updateSummary();
 
-// ── Status helpers ────────────────────────────────────────
+//Status helpers
 function setStatus(text, state = "idle") {
   statusText.textContent = text;
   statusIcon.className   = "status-icon " + (state !== "idle" ? state : "");
   statusText.className   = "status-text"  + (state === "err" ? " err" : "");
 }
 
-// ── Form data ─────────────────────────────────────────────
+//Form data
 function collectFormData() {
   return {
     supply_kv:           form.elements["supply_kv"].value,
@@ -111,7 +111,7 @@ function collectFormData() {
   };
 }
 
-// ── Submit ────────────────────────────────────────────────
+//Submit
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   resultPanel.classList.add("hidden");

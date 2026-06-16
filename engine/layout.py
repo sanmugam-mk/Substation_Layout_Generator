@@ -1,12 +1,11 @@
 """
 engine/layout.py
-================
-Pure geometry. No DXF, no user I/O.
+This file decides where the each blocks should go, and how big the canvas should be.
 
-Row order inside the main room (top → bottom):
-  ROW 0  TX-1…TX-n  [1000]  TX-NGR-n…TX-NGR-1 | HT ROOM   (rear/top)
-  ROW 1  LT PANEL          (full width)
-  ROW 2  DG SYNCHRONIZER + APFCRs              (bottom)
+Order of blocks placed inside the main room:
+  ROW 0  TX-1…TX-n + TX-NGR-n…TX-NGR-1 + HT PANEL WITH CLEARANCE ROOM (top)
+  ROW 1  LT PANEL          
+  ROW 2  DG SYNCHRONIZER + APFCRs (bottom)
 
 Key clearance rules enforced:
   TX ↔ TX              = TX_MIN_BETWEEN         (1500)
@@ -45,10 +44,6 @@ from core.constants import (
     ENTRANCE_H,
 )
 
-# ─────────────────────────────────────────────────────────────
-# RESULT DATACLASSES
-# ─────────────────────────────────────────────────────────────
-
 @dataclass
 class Box:
     """Positioned rectangle. Origin (x,y) = bottom-left. All mm."""
@@ -86,10 +81,6 @@ class LayoutResult:
     entrance_y:   float = 0
 
 
-# ─────────────────────────────────────────────────────────────
-# LAYOUT ENGINE
-# ─────────────────────────────────────────────────────────────
-
 def compute_layout(p) -> LayoutResult:
     L = LayoutResult()
 
@@ -113,10 +104,10 @@ def compute_layout(p) -> LayoutResult:
     # Number of TX NGRs (0 = none)
     n_ngr = max(0, int(p.n_tx_ngr))
 
-    # ── 1. Ancillary column ───────────────────────────────────
+    # 1. Ancillary column 
     ancil_total_h = sum(r[2] for r in ANCILLARY_ROOMS)
 
-    # ── 2. ROW 0 geometry ─────────────────────────────────────
+    # 2. ROW 0 geometry 
     tx_row_w = p.n_tx * TX_W + (p.n_tx - 1) * TX_MIN_BETWEEN
 
     # TX NGR slot: TX-last ←1000→ [NGR-n … NGR-1] | HT Room
@@ -135,21 +126,21 @@ def compute_layout(p) -> LayoutResult:
     row0_h = max(TX_H + TX_PIN_H, ht_room_h)
     row0_w = tx_row_w + tx_ngr_slot_w + ht_room_w
 
-    # ── 3. ROW 1: LT Panel ────────────────────────────────────
+    # 3. ROW 1: LT Panel 
     # (size now comes directly from user input: p.lt_panel_length / width)
 
-    # ── 4. ROW 2: DG Synchronizer + APFCRs ───────────────────
+    # 4. ROW 2: DG Synchronizer + APFCRs 
     n_apfcr     = p.n_tx if p.has_apfc else 0
     apfcr_row_w = n_apfcr * APFC_W + max(0, n_apfcr - 1) * DGS_MIN_WALL_CLEARANCE
     dg_row_w    = DGS_W + (DGS_MIN_WALL_CLEARANCE + apfcr_row_w if n_apfcr else 0)
     dg_row_h    = max(DGS_H, APFC_H if p.has_apfc else 0)
 
-    # ── 5. Main inner width ───────────────────────────────────
+    # 5. Main inner width
     side_margin  = max(TX_MIN_WALL_CLEARANCE, LT_MIN_SIDE_CLEARANCE, DGS_MIN_WALL_CLEARANCE)
     equip_w      = max(row0_w, dg_row_w, LT_W)
     main_inner_w = equip_w + 2 * side_margin
 
-    # ── 6. Main inner height ──────────────────────────────────
+    # 6. Main inner height 
     rows_h = (
         TX_MIN_REAR_CLEARANCE           # 1000
         + row0_h
@@ -161,25 +152,25 @@ def compute_layout(p) -> LayoutResult:
     )
     main_inner_h = rows_h
 
-    # ── 7. Canvas ─────────────────────────────────────────────
+    # 7. Canvas 
     total_h = max(ancil_total_h, main_inner_h) + 2 * WALL_T
     total_w = WALL_T + ANCIL_W + WALL_T + main_inner_w + WALL_T
 
     L.canvas_w = total_w
     L.canvas_h = total_h
 
-    # ── 8. Origins ────────────────────────────────────────────
+    # 8. Origins
     main_x = WALL_T + ANCIL_W + WALL_T
     main_y = WALL_T
     L.main = Box(main_x, main_y, main_inner_w, total_h - 2 * WALL_T)
 
-    # ── 9. Ancillary rooms (top → bottom) ─────────────────────
+    # 9. Ancillary rooms (top → bottom)
     ry = main_y + (total_h - 2 * WALL_T)
     for name, rw, rh in ANCILLARY_ROOMS:
         ry -= rh
         L.ancil_rooms.append((name, Box(WALL_T, ry, rw, rh)))
 
-    # ── 10. Y positions ───────────────────────────────────────
+    # 10. Y positions 
     top_inner_y  = main_y + (total_h - 2 * WALL_T)
     tx_pin_top_y = top_inner_y - TX_MIN_REAR_CLEARANCE
     tx_y         = tx_pin_top_y - TX_PIN_H - TX_H
@@ -192,7 +183,7 @@ def compute_layout(p) -> LayoutResult:
     lt_w      = LT_W
     dg_sync_y = lt_y - DGS_MIN_REAR_CLEARANCE - dg_row_h
 
-    # ── 11. X positions ───────────────────────────────────────
+    # 11. X positions
     equip_start_x = main_x + side_margin
 
     for i in range(p.n_tx):
@@ -230,7 +221,7 @@ def compute_layout(p) -> LayoutResult:
             L.apfc_panels.append(Box(apfc_cursor, apfc_y, APFC_W, APFC_H))
             apfc_cursor += APFC_W + DGS_MIN_WALL_CLEARANCE
 
-    # ── 12. Shutter & entrance ────────────────────────────────
+    # 12. Shutter & entrance
     L.shutter_y   = top_inner_y
     L.entrance_cx = main_x + main_inner_w / 2
     L.entrance_y  = main_y + ENTRANCE_H / 2

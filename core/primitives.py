@@ -1,9 +1,7 @@
 """
 core/primitives.py
-==================
 Low-level drawing helpers.
-All functions accept `msp` (modelspace) as first argument.
-Nothing here knows about substation logic — purely geometric.
+This file only knows how to draw shapes 
 """
 
 from ezdxf.enums import TextEntityAlignment

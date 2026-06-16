@@ -1,3 +1,5 @@
+# This files uses the Flask web framework which connects the frontend to the backend.
+
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from pathlib import Path
 import os
@@ -11,35 +13,28 @@ app = Flask(__name__,
 
 BASE_DIR = Path(__file__).resolve().parent
 
-
 @app.route("/")
 def home():
     return send_from_directory("web", "index.html")
-
 
 @app.route("/generate", methods=["POST"])
 def generate():
 
     payload = request.get_json()
-
     try:
         params = params_from_payload(payload)
-
         OUTPUT_DIR = BASE_DIR / "output_layout"
         OUTPUT_DIR.mkdir(exist_ok=True)
-
         out_path = write_dxf(
             params,
             output_dir=str(OUTPUT_DIR)
         )
-
         return jsonify({
             "success": True,
             "file": os.path.basename(out_path),
             "canvas_w": params.canvas_w,
             "canvas_h": params.canvas_h,
         })
-
     except Exception as e:
         return jsonify({
             "success": False,
@@ -48,17 +43,13 @@ def generate():
 
 @app.route("/download/<filename>")
 def download_file(filename):
-
     output_dir = BASE_DIR / "output_layout"
-
     file_path = output_dir / filename
-
     if not file_path.exists():
         return jsonify({
             "success": False,
             "error": "File not found"
         }), 404
-
     return send_file(
         file_path,
         as_attachment=True,
@@ -68,7 +59,6 @@ def download_file(filename):
 def params_from_payload(payload):
 
     p = SubstationParams()
-
     p.supply_kv = int(payload["supply_kv"])
 
     p.n_tx = int(payload["n_tx"])
@@ -80,7 +70,7 @@ def params_from_payload(payload):
     p.ht_outgoings = int(payload["ht_outgoings"])
     p.ht_panel_length = int(payload["ht_panel_length"])
     p.ht_panel_width = int(payload["ht_panel_width"])
-
+    
     p.lt_incomers = int(payload["lt_incomers"])
     p.lt_outgoings = int(payload["lt_outgoings"])
     p.lt_panel_length = int(payload["lt_panel_length"])
@@ -106,7 +96,6 @@ def params_from_payload(payload):
         "out_file",
         "substation_layout.dxf"
     )
-
     return p
 
 

@@ -1,8 +1,10 @@
 """
 engine/placer.py
-================
-Draws every equipment block into modelspace.
-Receives a LayoutResult; calls primitives only — no coordinate math here.
+
+This file draws the blocks at the specified position in the AutoCAD space
+geomentry of the blocks - given by  primitives.py file
+position of the blocks to be placed - given by layout.py file
+
 Each draw_* function is responsible for exactly one block type.
 """
 
@@ -15,11 +17,7 @@ from core.constants import (
 )
 from core.primitives import rect, inner_rect, line, text_center, text_at
 
-
-# ─────────────────────────────────────────────────────────────
 # STRUCTURAL
-# ─────────────────────────────────────────────────────────────
-
 def draw_outer_walls(msp, L):
     rect(msp, 0, 0, L.canvas_w, L.canvas_h, "WALLS")
 
@@ -70,9 +68,7 @@ def draw_title_block(msp, L, p):
     text_center(msp, cx, tb_y + 400, sub, TH_SMALL, "TITLE_BLOCK")
 
 
-# ─────────────────────────────────────────────────────────────
 # EQUIPMENT BLOCKS
-# ─────────────────────────────────────────────────────────────
 
 def draw_transformer(msp, b, label, kv):
     rect(msp, b.x, b.y, b.w, b.h, "TRANSFORMERS")
@@ -130,10 +126,7 @@ def draw_apfc(msp, b, label="APFC PANEL"):
     text_center(msp, b.cx, b.cy, label, TH_NORMAL, "APFC")
 
 
-# ─────────────────────────────────────────────────────────────
 # DIMENSIONS
-# ─────────────────────────────────────────────────────────────
-
 def draw_overall_dims(msp, L):
     from core.primitives import dim_horizontal, dim_vertical
     dim_horizontal(msp, 0, L.canvas_w, 0,          1800, "DIMENSIONS")

@@ -1,4 +1,4 @@
-/* ── Reset & tokens ─────────────────────────────────────── */
+/* Reset & tokens  */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -27,7 +27,7 @@
 
 body { min-height: 100vh; }
 
-/* ── Header ─────────────────────────────────────────────── */
+/* Header */
 .site-header {
   background: var(--text);
   border-bottom: 3px solid var(--accent);
@@ -66,7 +66,7 @@ body { min-height: 100vh; }
   letter-spacing: 0.02em;
 }
 
-/* ── Page title bar ─────────────────────────────────────── */
+/* Page title bar  */
 .page-title-bar {
   max-width: 1200px;
   margin: 0 auto;
@@ -86,7 +86,7 @@ body { min-height: 100vh; }
   max-width: 740px;
 }
 
-/* ── Layout grid ────────────────────────────────────────── */
+/* Layout grid  */
 .page-shell { max-width: 1200px; margin: 0 auto; }
 
 .layout-grid {
@@ -99,7 +99,7 @@ body { min-height: 100vh; }
   .layout-grid { grid-template-columns: 1fr 280px; align-items: start; }
 }
 
-/* ── Form panel ─────────────────────────────────────────── */
+/*  Form panel  */
 .form-panel {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -113,7 +113,7 @@ body { min-height: 100vh; }
   gap: 0;
 }
 
-/* ── Fieldsets ──────────────────────────────────────────── */
+/* Fieldsets  */
 fieldset {
   border: none;
   border-bottom: 1px solid var(--border);
@@ -148,7 +148,7 @@ legend {
   flex-shrink: 0;
 }
 
-/* ── Fields ─────────────────────────────────────────────── */
+/* Fields  */
 .field-row { margin-top: 10px; }
 .field-row:first-of-type { margin-top: 0; }
 .field-row.two-col {
@@ -199,7 +199,7 @@ input:disabled {
   margin-bottom: 10px;
 }
 
-/* ── Toggle (optional equipment) ───────────────────────── */
+/*  Toggle (optional equipment) */
 .toggle-block { margin-top: 12px; }
 .toggle-block:first-of-type { margin-top: 0; }
 
@@ -229,7 +229,7 @@ input:disabled {
 }
 .optional-fields.disabled { opacity: 0.4; pointer-events: none; }
 
-/* ── Form actions ───────────────────────────────────────── */
+/* Form actions */
 .form-actions {
   padding: 16px 20px;
   border-top: 1px solid var(--border);
@@ -283,7 +283,7 @@ button#generate-btn:disabled {
 }
 .status-text.err { color: var(--error); }
 
-/* ── Inline result (appears next to Generate button) ────── */
+/*  Inline result (appears next to Generate button) */
 .inline-result {
   display: flex;
   align-items: center;
@@ -324,7 +324,7 @@ button#generate-btn:disabled {
   white-space: nowrap;
 }
 
-/* ── Sidebar ────────────────────────────────────────────── */
+/*  Sidebar  */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -416,7 +416,7 @@ button#generate-btn:disabled {
 
 .hidden { display: none !important; }
 
-/* ── NGR count input row ─────────────────────────────────── */
+/* NGR count input row */
 .toggle-label-plain {
   display: flex;
   align-items: baseline;

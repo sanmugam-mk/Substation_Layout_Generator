@@ -1,6 +1,5 @@
 """
 core/layers.py
-==============
 All DXF layer definitions.
 Format: { layer_name: (aci_color, lineweight_in_hundredths) }
 

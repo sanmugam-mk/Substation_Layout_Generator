@@ -1,8 +1,6 @@
 """
 Substation Layout Generator — L&T
-==================================
 Entry point. Run this file.
-
     python main.py
 
 Project structure:
@@ -22,11 +20,9 @@ Project structure:
 """
 
 import sys
-
 from inputs.form import collect_inputs
 from output.dxf_writer import write_dxf
 from server import run_server
-
 
 def run_cli():
     params = collect_inputs()
@@ -35,13 +31,11 @@ def run_cli():
     print(f"  Canvas : {params.canvas_w} × {params.canvas_h} mm")
     print(f"  Supply : {params.supply_kv} kV\n")
 
-
 def main():
     if len(sys.argv) > 1 and sys.argv[1].lower() in ("--cli", "cli"):
         run_cli()
     else:
         run_server()
-
 
 if __name__ == "__main__":
     main()
