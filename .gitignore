@@ -7,3 +7,5 @@ venv/
 
 output_layout/
 *.dxf
+
+ErrorReports/

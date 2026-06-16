@@ -25,9 +25,12 @@ def generate():
     try:
         params = params_from_payload(payload)
 
+        OUTPUT_DIR = BASE_DIR / "output_layout"
+        OUTPUT_DIR.mkdir(exist_ok=True)
+
         out_path = write_dxf(
             params,
-            output_dir=str(BASE_DIR / "output_layout")
+            output_dir=str(OUTPUT_DIR)
         )
 
         return jsonify({
