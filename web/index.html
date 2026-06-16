@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Substation Layout Generator — L&T</title>
+  <link rel="stylesheet" href="/web/style.css" />
+</head>
+<body>
+  <div class="page-shell">
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="brand-tag">L&amp;T</span>
+          <span class="brand-name">Larsen &amp; Toubro</span>
+        </div>
+        <span class="header-division">Electrical &amp; Automation</span>
+      </div>
+    </header>
+
+    <div class="page-title-bar">
+      <h1>Substation Layout Generator</h1>
+      <p class="page-desc">Fill in the configuration below and generate a DXF drawing. All dimensions in millimetres (mm). Default values are pre-filled — change only what you need.</p>
+    </div>
+
+    <main class="layout-grid">
+
+      <!-- ── FORM COLUMN ─────────────────────────────────── -->
+      <section class="form-panel">
+        <form id="layout-form" novalidate>
+
+          <!-- 1. Power Supply -->
+          <fieldset>
+            <legend><span class="fs-num">1</span> Power Supply</legend>
+            <div class="field-row">
+              <label for="supply_kv">Supply voltage (kV)
+                <input type="number" id="supply_kv" name="supply_kv" min="1" value="22" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- 2. Transformers -->
+          <fieldset>
+            <legend><span class="fs-num">2</span> Transformers</legend>
+            <div class="field-row two-col">
+              <label for="n_tx">Number of transformers
+                <input type="number" id="n_tx" name="n_tx" min="1" value="3" required />
+              </label>
+              <label for="tx_rating">Rating per transformer
+                <input type="text" id="tx_rating" name="tx_rating" value="1000 kVA" required />
+              </label>
+            </div>
+            <div class="field-row two-col">
+              <label for="tx_length">TX length — horizontal (mm)
+                <input type="number" id="tx_length" name="tx_length" min="1" value="2200" required />
+              </label>
+              <label for="tx_width">TX width — vertical (mm)
+                <input type="number" id="tx_width" name="tx_width" min="1" value="2200" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- 3. HT Panel -->
+          <fieldset>
+            <legend><span class="fs-num">3</span> HT Panel</legend>
+            <div class="field-row two-col">
+              <label for="ht_incomers">Incomers
+                <input type="number" id="ht_incomers" name="ht_incomers" min="1" value="1" required />
+              </label>
+              <label for="ht_outgoings">Outgoings
+                <input type="number" id="ht_outgoings" name="ht_outgoings" min="0" value="2" required />
+              </label>
+            </div>
+            <div class="field-row two-col">
+              <label for="ht_panel_length">Panel length (mm)
+                <input type="number" id="ht_panel_length" name="ht_panel_length" min="1" value="4000" required />
+              </label>
+              <label for="ht_panel_width">Panel width (mm)
+                <input type="number" id="ht_panel_width" name="ht_panel_width" min="1" value="1200" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- 4. LT Panel -->
+          <fieldset>
+            <legend><span class="fs-num">4</span> LT Panel</legend>
+            <div class="field-row two-col">
+              <label for="lt_incomers">Incomers
+                <input type="number" id="lt_incomers" name="lt_incomers" min="1" value="1" required />
+              </label>
+              <label for="lt_outgoings">Outgoings
+                <input type="number" id="lt_outgoings" name="lt_outgoings" min="0" value="4" required />
+              </label>
+            </div>
+            <div class="field-row two-col">
+              <label for="lt_panel_length">Panel length (mm)
+                <input type="number" id="lt_panel_length" name="lt_panel_length" min="1" value="10000" required />
+              </label>
+              <label for="lt_panel_width">Panel width (mm)
+                <input type="number" id="lt_panel_width" name="lt_panel_width" min="1" value="1400" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- 5. DG Synchronizer -->
+          <fieldset>
+            <legend><span class="fs-num">5</span> DG Synchronizer</legend>
+            <p class="field-hint">Single synchronizer panel replaces individual DG sets in the layout.</p>
+            <div class="field-row two-col">
+              <label for="dg_sync_count">Number of DG units
+                <input type="number" id="dg_sync_count" name="dg_sync_count" min="1" value="3" required />
+              </label>
+              <label for="dg_sync_unit_rating">Rating per unit (kVA)
+                <input type="number" id="dg_sync_unit_rating" name="dg_sync_unit_rating" min="1" value="500" required />
+              </label>
+            </div>
+            <div class="field-row two-col">
+              <label for="dg_sync_length">Panel length — horizontal (mm)
+                <input type="number" id="dg_sync_length" name="dg_sync_length" min="1" value="6000" required />
+              </label>
+              <label for="dg_sync_width">Panel width — vertical (mm)
+                <input type="number" id="dg_sync_width" name="dg_sync_width" min="1" value="1800" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- 6. Optional Equipment -->
+          <fieldset>
+            <legend><span class="fs-num">6</span> Optional Equipment</legend>
+
+            <!-- APFC -->
+            <div class="toggle-block">
+              <label class="toggle-label">
+                <input type="checkbox" name="has_apfc" id="has_apfc" checked />
+                <span class="toggle-text">Include APFC Panel</span>
+              </label>
+              <div class="optional-fields" id="apfc-fields">
+                <div class="field-row two-col">
+                  <label for="apfc_length">APFC length (mm)
+                    <input type="number" id="apfc_length" name="apfc_length" min="1" value="1200" />
+                  </label>
+                  <label for="apfc_width">APFC width (mm)
+                    <input type="number" id="apfc_width" name="apfc_width" min="1" value="1200" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- TX NGR -->
+            <div class="toggle-block">
+              <label for="n_tx_ngr" class="toggle-label-plain">Number of TX NGRs
+                <span class="field-hint-inline">(0 = none, max 4 — placed left of HT room)</span>
+              </label>
+              <div class="field-row ngr-count-row">
+                <input type="number" id="n_tx_ngr" name="n_tx_ngr" min="0" max="4" value="1" />
+              </div>
+              <div class="optional-fields" id="ngr-fields">
+                <p class="field-hint">Dimensions apply to each TX NGR unit.</p>
+                <div class="field-row two-col">
+                  <label for="tx_ngr_length">TX NGR length (mm)
+                    <input type="number" id="tx_ngr_length" name="tx_ngr_length" min="1" value="1200" />
+                  </label>
+                  <label for="tx_ngr_width">TX NGR width (mm)
+                    <input type="number" id="tx_ngr_width" name="tx_ngr_width" min="1" value="1200" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+
+          <!-- 7. Output -->
+          <fieldset>
+            <legend><span class="fs-num">7</span> Output</legend>
+            <div class="field-row">
+              <label for="out_file">Output filename
+                <input type="text" id="out_file" name="out_file" value="substation_layout.dxf" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="submit" id="generate-btn">Generate DXF</button>
+            <div class="status-wrap">
+              <span id="status-icon" class="status-icon"></span>
+              <span id="status" class="status-text">Ready</span>
+            </div>
+
+            <!-- ↓ Inline download strip — appears right after generation ↓ -->
+            <div id="inline-result" class="inline-result hidden">
+              <a id="inline-download" href="#" download class="inline-download-btn">⬇ Download DXF</a>
+              <span id="inline-filename" class="inline-filename"></span>
+              <span id="inline-dims" class="inline-dims"></span>
+            </div>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- ── SIDEBAR ─────────────────────────────────────── -->
+      <aside class="sidebar">
+
+        <div class="sidebar-card summary-card">
+          <p class="sidebar-label">Configuration summary</p>
+          <table class="summary-table">
+            <tbody>
+              <tr><td class="sk">Supply</td><td class="sv" id="s-supply">22 kV</td></tr>
+              <tr><td class="sk">Transformers</td><td class="sv" id="s-tx">3 × 1000 kVA</td></tr>
+              <tr><td class="sk">HT Panel</td><td class="sv" id="s-ht">4000 × 1200 mm</td></tr>
+              <tr><td class="sk">LT Panel</td><td class="sv" id="s-lt">10000 × 1400 mm</td></tr>
+              <tr><td class="sk">DG Sync</td><td class="sv" id="s-dg">3×500 kVA (6000 × 1800 mm)</td></tr>
+              <tr><td class="sk">Optional</td><td class="sv" id="s-opt">APFC, 1× TX NGR</td></tr>
+              <tr><td class="sk">Output file</td><td class="sv" id="s-file">substation_layout.dxf</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sidebar-card notes-card">
+          <p class="sidebar-label">Notes</p>
+          <ul class="notes-list">
+            <li>Default values represent a standard 3×1000 kVA substation.</li>
+            <li>HT room clearances are fixed margins added outside the panel dimensions.</li>
+            <li>TX NGR units share the HT room outer wall (right wall of NGR = left wall of HT room).</li>
+            <li>Multiple TX NGRs are placed side by side, leftward from the HT room.</li>
+          </ul>
+        </div>
+
+        <div id="result" class="sidebar-card result-card hidden">
+          <p class="sidebar-label">Output ready</p>
+          <p class="result-filename" id="result-filename">substation_layout.dxf</p>
+          <a id="download-link" href="#" download class="download-btn">Download DXF</a>
+          <p id="dimensions" class="result-dims"></p>
+        </div>
+
+      </aside>
+
+    </main>
+  </div>
+
+  <script src="/web/app.js"></script>
+</body>
+</html>
